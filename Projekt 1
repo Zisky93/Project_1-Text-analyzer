@@ -1,0 +1,177 @@
+
+from itertools import count
+
+
+users = {'bob': '123', 'ann': 'pass123','mike': 'password123', 'liz': 'pass123'}
+TEXTS = ['''
+Situated about 10 miles west of Kemmerer,
+Fossil Butte is a ruggedly impressive
+topographic feature that rises sharply
+some 1000 feet above Twin Creek Valley
+to an elevation of more than 7500 feet
+above sea level. The butte is located just
+north of US 30N and the Union Pacific Railroad,
+which traverse the valley. ''',
+'''At the base of Fossil Butte are the bright
+red, purple, yellow and gray beds of the Wasatch
+Formation. Eroded portions of these horizontal
+beds slope gradually upward from the valley floor
+and steepen abruptly. Overlying them and extending
+to the top of the butte are the much steeper
+buff-to-white beds of the Green River Formation,
+which are about 300 feet thick.''',
+'''The monument contains 8198 acres and protects
+a portion of the largest deposit of freshwater fish
+fossils in the world. The richest fossil fish deposits
+are found in multiple limestone layers, which lie some
+100 feet below the top of the butte. The fossils
+represent several varieties of perch, as well as
+other freshwater genera and herring similar to those
+in modern oceans. Other fish such as paddlefish,
+garpike and stingray are also present'''
+]
+
+
+#Log in
+separator = 60 * "-"
+username = input('Username: '.upper())
+password = input('Password: '.upper())
+print(separator)
+if users.get(username) == password:
+     print(f'Welcome to the app, {username}!')
+     print("We have 3 texts to be analyzed.")
+     print(separator)
+    
+else: 
+    print('Unregistered user, terminating the program..')
+    quit()
+    print(separator)
+#Text to analyze
+collection = input("Enter a number of text to be analyzed (1-3): ")
+value_check = collection.isnumeric()
+if value_check is not True :
+    print("The value is not a number, terminating the program.. ")
+    print(separator)
+    quit()
+collection_int = int(collection)
+adjusted_collection = collection_int - 1
+if adjusted_collection < 0:
+    print("Wrong text selection, next time choose between texts 1 to 3, terminating the program..")
+    print(separator)
+    quit()
+elif adjusted_collection > 2:
+    print("Wrong text selection, next time choose between texts 1 to 3, terminating the program..")
+    print(separator)
+    quit()
+print(separator)
+
+#Data adjustment
+seps = {'.' : ' ', '!' : ' ', '-' : ' ', '?' : ' '}
+
+words_before_adjustment = TEXTS[adjusted_collection].replace('.', '')
+words_before_adjustment_2 = words_before_adjustment.replace(',', '')
+words_before_adjustment_3 = words_before_adjustment_2.replace('-', ' ')
+for key, value in seps.items():
+    clean_words_str = words_before_adjustment_3.replace(key, value)
+    clean_words_list = clean_words_str.split()
+
+#Variables
+
+#Words count in total
+number_of_words = len(clean_words_list)
+if number_of_words == 1:
+    print("There is" , len(clean_words_list) , "word in the selected text.")
+else:
+    print("There are" , len(clean_words_list) , "words in the selected text.")
+print(separator)
+
+#Title words
+istitle_list = []
+for word in clean_words_list:
+    if word.istitle():
+        istitle_list.append(word)
+if len(istitle_list) == 1:
+    print("There is" , len(istitle_list) , "titlecase word in the selected text.")
+else:
+    print("There are" , len(istitle_list) , "titlecase words in the selected text.")
+print(separator)
+
+#Big letter words
+isupper_list = []
+for word in clean_words_list:
+    if word.isupper():
+        isupper_list.append(word)
+if len(isupper_list) == 1:
+    print("There is" , len(isupper_list) , "uppercase word.")
+else:
+    print("There are" , len(isupper_list) , "uppercase words.")
+print(separator)
+
+#Lower letter words
+islower_list = []
+for word in clean_words_list:
+    if word.islower():
+        islower_list.append(word)
+if len(islower_list) == 1:
+    print("There is" , len(islower_list) , "lowercase word.")
+else:
+    print("There are" , len(islower_list) , "lowercase words.")
+print(separator)
+
+#Numeric words
+isnumeric_list = []
+for word in clean_words_list:
+    if word.isnumeric():
+        isnumeric_list.append(word)
+if len(isnumeric_list) == 1:
+    print("There is" , len(isnumeric_list) , "numeric string.")
+else:
+    print("There are" , len(isnumeric_list) , "numeric strings.")
+print(separator)
+
+#Sum numeric words
+int_numeric = [int(i) for i in isnumeric_list]
+print("The sum of all the numbers: " , sum(int_numeric))
+print(separator)
+
+#Chart
+print("LEN " , "\t" , "|",   "OCCURENCES", 2 * "\t" , "|" , "NR.")
+print(separator)
+
+letters = []
+for word in clean_words_list:
+    letters.append(len(word))
+
+
+d = {}
+for i in range(len(letters) - 1):
+    x = letters[i]
+    c = 0
+    for j in range(i,len(letters)):
+        if j in range(i,len(letters)):
+            if letters[j] == letters[i]:
+                c = c + 1
+    count = dict({x:c})
+    if x not in d.keys():
+        d.update(count)
+
+import collections
+sorted_dict = collections.OrderedDict(sorted(d.items()))
+
+#Values
+values = sorted_dict.values()
+value_max = max(values)
+value_max_str = str(value_max)
+len_value = len(value_max_str)
+
+
+value_max_len = len(value_max_str)
+value_max_len_str = str(value_max_len)
+
+
+for k, v in sorted_dict.items():
+            print(k, "\t" , "|" , v * "*", " " * (value_max - v) , "\t" , "|", v)
+           
+
+           
+
